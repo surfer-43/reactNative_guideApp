@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 
 export default function App() {
   const [ enteredGoal, setEnteredGoal ] = useState('');
@@ -13,7 +13,13 @@ export default function App() {
     console.log('new goal to be added: ', enteredGoal);
     // not garanteed to have the old state
     // setTotalGoals([...totalGoals, enteredGoal]);
-    setTotalGoals( currentGoals => [...totalGoals, enteredGoal]);
+    
+    /**
+     * for FlatList to work right it needs specific properties or object shapes
+     * {key:{{random id}}, item: "{{string value}}"}
+    */
+
+    setTotalGoals( currentGoals => [...totalGoals, {key: Math.random().toString(), value: enteredGoal}]);
   }
 
   return (
@@ -30,15 +36,17 @@ export default function App() {
           onPress={addGoalHandler}
         />
       </View>
-      <ScrollView>
-        {totalGoals.map( ( course, index ) => {
-          return (
-            <View key={index} style={styles.listItem}>
-              <Text style={styles.listItemText}>{course}</Text>
-            </View>
-          )
-        })}
-      </ScrollView>
+      <FlatList 
+        data={totalGoals} 
+        keyExtractor={itemData => itemData.key}
+        renderItem={ itemData => {
+        console.log('what is in itemData: ', itemData);
+        return (
+          <View style={styles.listItem}>
+            <Text style={styles.listItemText}>{itemData.item.value}</Text>
+          </View>
+        )
+      }}/>
     </View>
   );
 }
