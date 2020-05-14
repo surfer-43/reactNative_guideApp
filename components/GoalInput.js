@@ -23,6 +23,7 @@ const GoalInput = (props) => {
         />
         <Button 
           title="Add"
+          // personally I like this better until I figure out if there is an issue
         //   onPress={() => props.addGoal(enteredGoal)} - option one inline function that calls the props function with a parameter
         
         // .bind sets up the function to recieve parameters on 
