@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button } from 'react-native';
 
 import GoalInput from './components/GoalInput';
 import GoalItem from './components/GoalItem';
 
 export default function App() {
-  const [ totalGoals, setTotalGoals ] = useState([])
+  const [ totalGoals, setTotalGoals ] = useState([]);
+  const [ modalIsVis, setModalIsVis ] = useState( false );
 
 
   const addGoalHandler = (goal) => {
@@ -19,6 +20,11 @@ export default function App() {
     */
 
     setTotalGoals( currentGoals => [...totalGoals, {key: Math.random().toString(), value: goal}]);
+    showModalHandler();
+  }
+
+  const cancelAddingGoal = () => {
+    showModalHandler();
   }
 
   const deleteItemHandler = (goalId) => {
@@ -28,10 +34,18 @@ export default function App() {
     })
   }
 
+  const showModalHandler = () => {
+    console.log("state of the modal: ", modalIsVis);
+    setModalIsVis( modalIsVis => !modalIsVis);
+  }
+
   return (
     <View style={styles.mainContainer}>
+      <Button title="Open Modal" onPress={showModalHandler}/>
       <GoalInput 
+        isVis={modalIsVis}
         addGoal={addGoalHandler}
+        cancelGoal={cancelAddingGoal}
       />
       <FlatList 
         data={totalGoals} 
